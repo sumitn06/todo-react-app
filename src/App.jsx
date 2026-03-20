@@ -1,14 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
 
   //state to handle todo input box
   const [todoInput, setTodoInput] = useState("");
 
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
   function addTodo() {
     //logic
+
+    if (todoInput.trim() === "") {
+      return;
+    }
 
     const todoObj = {
       todoTitle: todoInput,
@@ -18,6 +29,8 @@ function App() {
 
     const newArr = [...todos, todoObj];
     setTodos(newArr);
+
+    setTodoInput("");
   }
 
   function deleteTodo(id) {
@@ -33,7 +46,7 @@ function App() {
   function toggleTodo(id) {
     const newUpdatedArray = todos.map((todo) => {
       if (id === todo.id) {
-        todo.isCompleted = !todo.isCompleted;
+        return { ...todo, isCompleted: !todo.isCompleted };
       }
 
       return todo;
@@ -50,6 +63,7 @@ function App() {
           type="text"
           placeholder="Enter Todo"
           onChange={(e) => setTodoInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && addTodo()}
           value={todoInput}
         />
         <button onClick={addTodo}>Add Todo</button>
@@ -59,7 +73,11 @@ function App() {
         {todos.map((todo) => {
           return (
             <div key={todo.id} className="todo-container">
-              <input type="checkbox" onChange={() => toggleTodo(todo.id)} />
+              <input
+                type="checkbox"
+                checked={todo.isCompleted}
+                onChange={() => toggleTodo(todo.id)}
+              />
               <p
                 id="todo-item"
                 style={{

@@ -12,26 +12,28 @@ body {
 
 h1 {
   text-align: center;
-  margin: 20px;
+  margin-top: 40px;
 }
 
 .todo-input {
   display: flex;
   justify-content: center;
   padding: 8px;
+  margin-top: 30px;
   gap: 10px;
 }
 
 .todo-input input,
 button {
-  padding: 8px;
-  border-radius: 5px;
+  padding: 4px 12px;
+  border-radius: 8px;
   border: none;
   outline: none;
 }
 
 .todo-input input {
   width: 20%;
+  height: 35px;
 }
 
 .todo-input button {
@@ -68,6 +70,7 @@ button {
   background-color: red;
   color: rgba(255, 255, 255, 0.925);
   font-weight: bold;
+  padding: 6px 12px;
 }
 
 .todo-container input[type="checkbox"] {
